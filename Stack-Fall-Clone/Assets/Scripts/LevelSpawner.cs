@@ -11,7 +11,9 @@ public class LevelSpawner : MonoBehaviour
 
     private GameObject temp1Obstacle, temp2Obstacle;
 
-    private int level = 1, addNumber = 7;
+    private int level = 10, addNumber = 7;
+
+    
 
     float obstacleNumber;
 
@@ -20,6 +22,7 @@ public class LevelSpawner : MonoBehaviour
     void Start()
     {
         randomObstaclegenerator();
+        float radomNumber = Random.value;
         for (obstacleNumber = 0; obstacleNumber >-level -addNumber ; obstacleNumber -= 0.5f)
         {
             //level kontrol
@@ -31,7 +34,7 @@ public class LevelSpawner : MonoBehaviour
             {
                 temp1Obstacle = Instantiate(obstaclePrefab[Random.Range(1, 3)]);
             }
-            if (level > 50 && level < 100)
+            if (level >= 50 && level < 100)
             {
                 temp1Obstacle = Instantiate(obstaclePrefab[Random.Range(2, 4)]);
             }
@@ -39,16 +42,39 @@ public class LevelSpawner : MonoBehaviour
             {
                 temp1Obstacle = Instantiate(obstaclePrefab[Random.Range(3, 4)]);
             }
-
+            //modellerimizi buradan ekliyoruz.
+          
             temp1Obstacle.transform.position = new Vector3(0, obstacleNumber - 0.01f, 0);
             temp1Obstacle.transform.eulerAngles = new Vector3(0, obstacleNumber * 8, 0);
+
+
+            //oyuncu zorlanmasý için modelin döndürme iþlemleri.
+            if (  Mathf.Abs(obstacleNumber) >= level * 0.3f && obstacleNumber <= obstacleNumber * 0.06f)
+            {
+                temp1Obstacle.transform.eulerAngles = new Vector3(0, obstacleNumber * 8, 0);
+                temp1Obstacle.transform.eulerAngles += Vector3.up * 180;
+            }
+            else if (obstacleNumber>level*08f)
+            {
+                temp1Obstacle.transform.eulerAngles = new Vector3(0, obstacleNumber * 8, 0);
+                if (radomNumber>.75f)
+                {
+                    temp1Obstacle.transform.eulerAngles += Vector3.up * 180;
+                }
+               
+            }
+
+
+
+            // modellerin dönmesini saðlayacak olan  boþ objenin içne akratýlmasýný saðlayan kýsým.
+            temp1Obstacle.transform.parent = FindObjectOfType<RotateManager>().transform;
         }
         temp2Obstacle = Instantiate(winPrefeb);
         temp2Obstacle.transform.position= new Vector3(0, obstacleNumber - 0.01f, 0);
 
     }
 
-    // Update is called once per frame
+  
     void Update()
     {
         
